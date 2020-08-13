@@ -35,7 +35,7 @@ public class UICode extends javax.swing.JFrame {
        this.getContentPane().setBackground(new java.awt.Color(255, 255, 255));
          
         // Window Title
-        JTextField newTitle = new JTextField("AnyAUT-XL1.9.TEST - Excel Driven Test Automation Framework. Demo for upto 1000 Test Steps.");
+        JTextField newTitle = new JTextField("AnyAUT v1.9.2 - Excel Driven Test Automation Framework. Demo for upto 10K Test Steps.");
         this.setTitle(newTitle.getText());
          
         // For browsing an Excel
