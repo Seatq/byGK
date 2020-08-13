@@ -12,6 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
@@ -57,13 +61,14 @@ public class ExecuteTest extends Utilities {
 		tempPath = Utilities.fileAbsolutePath()+"Results/TestRun_" + TestRunName + "/";
 		
 		fileInputPath = tempPath + "TestRun_" + TestRunName + ".xls";
-		fileResultPath = tempPath + "RunResult.xls";
+		//fileResultPath = tempPath + "RunResult.xls";
+		fileResultPath = tempPath + "RunResult_"+ TestRunName + ".xls";
 		filePivotPath=Utilities.fileAbsolutePath()+"Pivot_Template.xls";
-		//filePivotPath = "C:\\XL\\Pivot.xls";
+		//fileResultPath=Utilities.fileAbsolutePath()+"Pivot_Template.xls";
 		
 		PropertyConfigurator.configure("log4j.properties");
 		
-		report = new ExtentReports(tempPath + "Report.html",true);
+		report = new ExtentReports(tempPath + "Report_"+ TestRunName +".html",true);
 		logger.info(fileInputPath);
 		logger.info(fileResultPath);
 		
@@ -176,7 +181,7 @@ public class ExecuteTest extends Utilities {
 						//logger.info("Teststep status : "+testCase_Result);
 						long vStopTime = System.currentTimeMillis();
 					    long vElapsedTime = vStopTime - vStartTime;
-					    vElapsedTime = vElapsedTime/1000;
+					    //vElapsedTime = vElapsedTime/1000;
 					    String vExecutionTime = Long.toString(vElapsedTime); 
 					    xlTestSteps[i][13] = vExecutionTime;
 			    
@@ -188,15 +193,14 @@ public class ExecuteTest extends Utilities {
 					    if(testCase_Result.equalsIgnoreCase("Pass")){
 					    	lowLevelKeywords.highlightElement(elementBy, elementID, "green" );
 					    	
-					    	if(elementType.equals("One Time Use")) {
-							    	testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
-					    		} else if(elementType.equals("Reusable Element")) {
-					    				testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
-					    			} 
-					    		else {
-					    			testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
-					    		}
-							
+							/*
+							 * if(elementType.equals("One Time Use")) {
+							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); } else
+							 * if(elementType.equals("Reusable Element")) {
+							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); } else {
+							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); }
+							 */
+					    	testSteps_Report.log(LogStatus.PASS,"Step Passed");
 						    testSteps_Report.log(LogStatus.INFO, "Test Data Set: "+ xlTestSteps[i][14]); 
 				    		testCase_Report.appendChild(testSteps_Report);
 				    		
@@ -214,13 +218,22 @@ public class ExecuteTest extends Utilities {
 								// lowLevelKeywords.unHighlightElement(elementBy, elementID );
 								xlTestSteps[i][12]="Look at Screenshot: "+screenShotFilePath; 
 								
-								if(elementType.equals("One Time Use")) {
-									testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
-									} else if(elementType.equals("Reusable Element")) {
-									testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
-									}  else {
-									testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
-								}
+							/*
+							 * if(elementType.equals("One Time Use")) {
+							 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); } else
+							 * if(elementType.equals("Reusable Element")) {
+							 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); } else {
+							 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); }
+							 */
+								testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
+								if (criticalStep.equalsIgnoreCase("Y")) {
+						    		testCase_Result = "Fail";
+						    		xlTestCases[j][4]="Fail";
+						    	}
+						    	else {
+						    		testCase_Result = "Warning";
+						    		xlTestCases[j][4]="Warning";
+						    	}
 								
 								testSteps_Report.log(LogStatus.INFO,testCase_Result);
 								testSteps_Report.log(LogStatus.INFO, "Test Data Set: "+ xlTestSteps[i][14]);
@@ -234,9 +247,8 @@ public class ExecuteTest extends Utilities {
 						    	// IF critical BREAK OUT after quit browser
 						    	xlTestSteps[i][10] = testCase_Result;
 								xlTestSteps[i][15] = severity;
-								xlTestCases[j][4]="Fail";
 								
-						    	if (criticalStep.equalsIgnoreCase("Y")) {
+								if (criticalStep.equalsIgnoreCase("Y")) {
 						    		try {
 						    			lowLevelKeywords.closeBrowser();
 						    			testSteps_Report.log(LogStatus.ERROR, "Critical Step Failed. Closing browser and stopping TC execution.");
@@ -247,6 +259,7 @@ public class ExecuteTest extends Utilities {
 						    		}
 						    		break;
 						    	}
+						    	
 					    }
 //						System.out.println("in try");
 						}
@@ -257,8 +270,6 @@ public class ExecuteTest extends Utilities {
 						    vElapsedTime = vElapsedTime/1000;
 						    String vExecutionTime = Long.toString(vElapsedTime);
 							logger.error("Error : " + ex.getClass().getSimpleName());
-							testCase_Result = "Fail";
-							xlTestCases[j][4]="Fail";
 							xlTestSteps[i][11] = "Error : " + ex;
 							stepDate = new Date();
 							String testStepScreenShot=lowLevelKeywords.takePageScreenshot(screenShotFilePath+"/"+xlTestSteps[i][1]+"_"+xlTestSteps[i][3]+"_"+dateFormat.format(stepDate)+".png");	
@@ -270,14 +281,22 @@ public class ExecuteTest extends Utilities {
 							testSteps_Report.log(LogStatus.INFO, "Test Data: "+ xlTestSteps[i][8]);
 							
 							// ??? Below 8 lines ??? 
-							if(elementType.equals("One Time Use")) {
-								testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
-								} else if(elementType.equals("Reusable Element")) {
-									testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
-									} 
-							else {
-								testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);						
-							}
+						/*
+						 * if(elementType.equals("One Time Use")) {
+						 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); } else
+						 * if(elementType.equals("Reusable Element")) {
+						 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); } else {
+						 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); }
+						 */
+							testSteps_Report.log(LogStatus.FAIL,"Fail");
+							if (criticalStep.equalsIgnoreCase("Y")) {
+					    		testCase_Result = "Fail";
+					    		xlTestCases[j][4]="Fail";
+					    	}
+					    	else {
+					    		testCase_Result = "Warning";
+					    		xlTestCases[j][4]="Warning";
+					    	}
 							// testSteps_Report.log(LogStatus.INFO,testCase_Result);
 							testSteps_Report.log(LogStatus.INFO,xlTestSteps[i][11]);
 							testSteps_Report.log(LogStatus.INFO, "Test Data Set: "+ xlTestSteps[i][14]); 
@@ -287,7 +306,6 @@ public class ExecuteTest extends Utilities {
 							// IF critical BREAK OUT after quit browser
 					    	xlTestSteps[i][10] = testCase_Result;
 							xlTestSteps[i][15] = severity;
-							
 					    	if (criticalStep.equalsIgnoreCase("Y")) {
 					    		try {
 					    			lowLevelKeywords.closeBrowser();
@@ -300,6 +318,7 @@ public class ExecuteTest extends Utilities {
 					    		break;
 					    	}
 						}//end of try-catch block
+						
 					//xlTestSteps[i][9] = testCase_Output;
 					xlTestSteps[i][10] = testCase_Result;
 					xlTestSteps[i][15]=severity;
@@ -325,13 +344,14 @@ public class ExecuteTest extends Utilities {
 		try
 		{
 			
-			writeXLSheets(fileResultPath, "TestCases", 0, xlTestCases);
-			writeXLSheets(fileResultPath, "TestSteps", 1, xlTestSteps);
-			System.out.println("Run Result.xls created");
+			//writeXLSheets(fileResultPath, "TestCases", 0, xlTestCases);
+			//writeXLSheets(fileResultPath, "TestSteps", 1, xlTestSteps);
+			//System.out.println("Run Result.xls created");
 			
 			//copy pivot.xls and place in Results folder
 			File source = new File(filePivotPath);
-			File dest = new File(tempPath+"Pivot_Result.xls");
+			//File dest = new File(tempPath+"Pivot_Result.xls");
+			File dest = new File(fileResultPath);
 			try {
 				FileUtils.copyFile(source, dest);
 			    //FileUtils.copyDirectory(source, dest);
@@ -340,9 +360,10 @@ public class ExecuteTest extends Utilities {
 			}
 			
 			//writeXLSheets(fileResultPath, "Pivot", 2, xlPivot);
-			writeXLSheets(tempPath+"Pivot_Result.xls", "TestCases", 0, xlTestCases);
-			writeXLSheets(tempPath+"Pivot_Result.xls", "TestSteps", 1, xlTestSteps);
-			System.out.println("Pivot_Result.xls created");
+			writeXLSheets(fileResultPath, "TestCases", 0, xlTestCases);
+			writeXLSheets(fileResultPath, "TestSteps", 1, xlTestSteps);
+			//System.out.println("Pivot_Result.xls created");
+			System.out.println("Run_Result.xls created");
 		}
 		catch(Exception e)
 		{

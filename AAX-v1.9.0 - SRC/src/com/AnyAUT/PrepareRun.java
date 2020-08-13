@@ -27,7 +27,7 @@ public class PrepareRun extends Utilities {
 	static int runnerTSRowCount;
 	arrayStructure testStepArray = new arrayStructure();
 	
-	static int demoCounterLimit = 20000;
+	//static int demoCounterLimit = 50000;
 	
 	arrayStructure testCaseArray = new arrayStructure();
 	
@@ -104,7 +104,7 @@ public class PrepareRun extends Utilities {
 		try{
 			//loop through each of the executable test cases
 			for (int i = 0; i < executableTCRowCount; i++) {
-				if (runnerTSRowCount < demoCounterLimit) {
+				//if (runnerTSRowCount < demoCounterLimit) {
 						strTestCaseID = xlExecutableTCs[i][1];
 						strModuleID = xlExecutableTCs[i][0];
 						vTDSets = xlExecutableTCs[i][5];
@@ -112,6 +112,12 @@ public class PrepareRun extends Utilities {
 						//call fetchTestDataSets method to fetch the Test Data set IDs for each test case
 						testDataSetID = fetchTestDataSets(vTDSets);
 						//steps are repeated for the number of Test Data sets for each test case
+						//if strSeverity belongs to 1,2 or 3 then execute
+				/*
+				 * if (strSeverity.equals(sev[0] || sev[1] || sev[2])) {
+				 * 
+				 * }
+				 */
 						for (int r = 0; r < testDataSetID.length; r++) {
 							//if a null value is in Test Data set then break out of the for loop
 							if (testDataSetID[r] == null) { 
@@ -264,9 +270,9 @@ public class PrepareRun extends Utilities {
 								}//end if
 							}//end j loop
 						}//end of r loop
-					} else {
-						break;//end i for loop
-					}
+				/*
+				 * } else { break;//end i for loop }
+				 */
 				
 			}
 		}catch (Exception e) {
@@ -297,6 +303,7 @@ public class PrepareRun extends Utilities {
 						xlExecutableTCs[p][2] = xlTestCaseData[j][2];
 						xlExecutableTCs[p][3] = xlTestCaseData[j][3];
 						xlExecutableTCs[p][4] = xlTestCaseData[j][4];
+						//xlExecutableTCs[p][4] = "Skipped";
 						xlExecutableTCs[p][5] = xlTestCaseData[j][5];
 						xlExecutableTCs[p][6] = xlTestCaseData[j][6];
 						//Added to include Result in TestRun Sheet
@@ -323,6 +330,7 @@ public class PrepareRun extends Utilities {
 									xlExecutableTCs[p][2] = xlTestCaseData[j][2];
 									xlExecutableTCs[p][3] = xlTestCaseData[j][3];
 									xlExecutableTCs[p][4] = xlTestCaseData[j][4];
+									//xlExecutableTCs[p][4] = "Skipped";
 									xlExecutableTCs[p][5] = xlTestCaseData[j][5];
 									//Added to include severity column in TestRun Sheet
 									xlExecutableTCs[p][6] = xlTestCaseData[j][6];
@@ -348,8 +356,8 @@ public class PrepareRun extends Utilities {
 		strError = xlTestStepData[j][13];
 		strScreenShot = xlTestStepData[j][14];
 		strTimeTaken = xlTestStepData[j][15];
-		demoCounterLimit--;
-		System.out.println("Prepared " + demoCounterLimit + "out of 20000");
+		//demoCounterLimit--;
+		//System.out.println("Prepared " + demoCounterLimit + "out of 50000");
 	}
 	
 	@SuppressWarnings("null")
@@ -409,7 +417,8 @@ public class PrepareRun extends Utilities {
 		testStepArray.add(fA, 7, strElementDetails[1]);
 		testStepArray.add(fA, 8, strTestData);
 		testStepArray.add(fA, 9, strCritical);
-		testStepArray.add(fA, 10, strResult);
+		//testStepArray.add(fA, 10, strResult);
+		testStepArray.add(fA, 10, "Skipped");
 		testStepArray.add(fA, 11, strError);
 		testStepArray.add(fA, 12, strScreenShot);
 		testStepArray.add(fA, 13, strTimeTaken);
@@ -429,11 +438,11 @@ public class PrepareRun extends Utilities {
 		}
 		for (x = 4; x < 8; x++)
 		{  
-			System.out.println("Value in the test step  " + xlTestStepData[0][x+1]);
+			//System.out.println("Value in the test step  " + xlTestStepData[0][x+1]);
 			testStepArray.add(0, x, xlTestStepData[0][x+1]);  
 		}
 		for (x = 8 ; x < testStepColumnCount-2; x++) {
-			System.out.println("Value in the test step  " + xlTestStepData[0][x+2]);
+			//System.out.println("Value in the test step  " + xlTestStepData[0][x+2]);
 			testStepArray.add(0, x, xlTestStepData[0][x+2]);
 		}
 		testStepArray.add(0, x, "Test Data Set");
