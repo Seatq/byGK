@@ -29,6 +29,9 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
 public class ExecuteTest extends Utilities {
 
 
@@ -193,14 +196,15 @@ public class ExecuteTest extends Utilities {
 					    if(testCase_Result.equalsIgnoreCase("Pass")){
 					    	lowLevelKeywords.highlightElement(elementBy, elementID, "green" );
 					    	
-							/*
-							 * if(elementType.equals("One Time Use")) {
-							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); } else
-							 * if(elementType.equals("Reusable Element")) {
-							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); } else {
-							 * testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]); }
-							 */
-					    	testSteps_Report.log(LogStatus.PASS,"Step Passed");
+					    	if(elementType.equals("One Time Use")) {
+							    	testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
+					    		} else if(elementType.equals("Reusable Element")) {
+					    				testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
+					    			} 
+					    		else {
+					    			testSteps_Report.log(LogStatus.PASS,xlTestSteps[i][10]);
+					    		}
+							
 						    testSteps_Report.log(LogStatus.INFO, "Test Data Set: "+ xlTestSteps[i][14]); 
 				    		testCase_Report.appendChild(testSteps_Report);
 				    		
@@ -288,7 +292,7 @@ public class ExecuteTest extends Utilities {
 						 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); } else {
 						 * testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]); }
 						 */
-							testSteps_Report.log(LogStatus.FAIL,"Fail");
+							testSteps_Report.log(LogStatus.FAIL,xlTestSteps[i][10]);
 							if (criticalStep.equalsIgnoreCase("Y")) {
 					    		testCase_Result = "Fail";
 					    		xlTestCases[j][4]="Fail";
@@ -297,7 +301,7 @@ public class ExecuteTest extends Utilities {
 					    		testCase_Result = "Warning";
 					    		xlTestCases[j][4]="Warning";
 					    	}
-							// testSteps_Report.log(LogStatus.INFO,testCase_Result);
+							//testSteps_Report.log(LogStatus.INFO,testCase_Result);
 							testSteps_Report.log(LogStatus.INFO,xlTestSteps[i][11]);
 							testSteps_Report.log(LogStatus.INFO, "Test Data Set: "+ xlTestSteps[i][14]); 
 							testSteps_Report.log(LogStatus.INFO, "Error Snapshot:" +testCase_Report.addScreenCapture(testStepScreenShot));
@@ -364,6 +368,8 @@ public class ExecuteTest extends Utilities {
 			writeXLSheets(fileResultPath, "TestSteps", 1, xlTestSteps);
 			//System.out.println("Pivot_Result.xls created");
 			System.out.println("Run_Result.xls created");
+			//SendEmail.mailRunResult(fileResultPath);
+			Utilities.mailRunResult(fileResultPath);
 		}
 		catch(Exception e)
 		{

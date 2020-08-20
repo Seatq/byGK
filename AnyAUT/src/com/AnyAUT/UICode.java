@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class UICode extends javax.swing.JFrame {
     
-	static String strTestRunName, strTestRunBy, strTestRunLocation, strBrowserTimeout;
+	static String strTestRunName, strTestRunBy, strTestRunLocation, strBrowserTimeout,strEmail;
     public UICode() {
          initComponents();
         
@@ -57,6 +57,9 @@ public class UICode extends javax.swing.JFrame {
         labelBrowserTimeout.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI16N
         labelBrowserTimeout.setText("Browser Timeout :");
 
+        labelEmail.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI16N
+        labelEmail.setText("Email :");
+        
         buttonBrowseXL.setFont(new java.awt.Font("Calibri", 1, 16)); // NOI16N
         buttonBrowseXL.setText("Browse");
 
@@ -95,6 +98,11 @@ public class UICode extends javax.swing.JFrame {
                 "<html><p><font color=\"#000\" " +
                 "size=\"18\" face=\"Calibri\">In seconds." +
                 "</font></p></html>";
+        
+        String vTT5 =
+                "<html><p><font color=\"#000\" " +
+                "size=\"18\" face=\"Calibri\">Provide Email." +
+                "</font></p></html>";
 
 
   		DateFormat df = new SimpleDateFormat("ddMMM_hhmm");  
@@ -108,6 +116,11 @@ public class UICode extends javax.swing.JFrame {
         vUserName.setToolTipText(vTT2);
         vRunExcelPath.setToolTipText(vTT3);
         vBrowserTimeout.setToolTipText(vTT4);
+        
+        // Set a default email
+        vEmail.setText("myaut.results@gmail.com");
+        
+        vEmail.setToolTipText(vTT5);
      
     }
 
@@ -120,6 +133,7 @@ public class UICode extends javax.swing.JFrame {
     	labelTestRunBy = new javax.swing.JLabel();
         labelSelectTestRun = new javax.swing.JLabel();
         labelBrowserTimeout = new javax.swing.JLabel();
+        labelEmail = new javax.swing.JLabel();
     	
         // Panel 
         panelForm = new javax.swing.JPanel();
@@ -129,6 +143,7 @@ public class UICode extends javax.swing.JFrame {
         vUserName = new javax.swing.JTextField();
         vRunExcelPath = new javax.swing.JTextField();
         vBrowserTimeout = new javax.swing.JTextField();
+        vEmail = new javax.swing.JTextField();
         
         buttonBrowseXL = new javax.swing.JButton();
         buttonExecute = new javax.swing.JButton();
@@ -186,13 +201,23 @@ public class UICode extends javax.swing.JFrame {
             }
         });
 
-        labelBrowserTimeout.setText("Default Browser Timeout");
-
+        labelBrowserTimeout.setText("Default Browser Timeout"); 
         vBrowserTimeout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 vBrowserTimeoutActionPerformed(evt);
             }
         });
+        
+        
+        //[SA] - Trying to add Email field to the bot
+        
+        labelEmail.setText("Provide Email Id for Results Capture");         
+        vEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vEmailActionPerformed(evt);
+            }
+        });
+        
         // [KK] - Need to add logo to our folder and give the relative path
         logoAnyAUT.setIcon(new javax.swing.ImageIcon("logo-anyaut-small.png"));
         //logoAnyAUT.setIcon(new javax.swing.ImageIcon("http://anyaut.com/wp-content/uploads/2016/11/logo-anyaut.png"));
@@ -218,13 +243,15 @@ public class UICode extends javax.swing.JFrame {
                             .addComponent(labelTestRunBy)
                             .addComponent(labelTestRunName)
                             .addComponent(labelBrowserTimeout)
+                            .addComponent(labelEmail)
                             .addComponent(labelSelectTestRun))
                         .addGap(39, 39, 39)
                         .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(vTestRunName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(vUserName, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(vRunExcelPath, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(vBrowserTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(vBrowserTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(vEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(buttonExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonBrowseXL, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -250,6 +277,11 @@ public class UICode extends javax.swing.JFrame {
                 .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelBrowserTimeout)
                     .addComponent(vBrowserTimeout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addGroup(panelFormLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(labelEmail)
+                        .addComponent(vEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addComponent(buttonExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13))
@@ -323,7 +355,12 @@ public class UICode extends javax.swing.JFrame {
     private void vBrowserTimeoutActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
 
-    }                                               
+    }              
+    
+    private void vEmailActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        // TODO add your handling code here:
+
+    } 
 
     private void buttonBrowseXLActionPerformed(java.awt.event.ActionEvent evt) {                                                
         
@@ -353,6 +390,7 @@ public class UICode extends javax.swing.JFrame {
 		strTestRunBy = vUserName.getText();
 		strTestRunLocation =vRunExcelPath.getText();
 		strBrowserTimeout = vBrowserTimeout.getText();
+		strEmail = vEmail.getText();
 		
 		
 		if (strTestRunName.length() == 0) {
@@ -366,6 +404,9 @@ public class UICode extends javax.swing.JFrame {
 		} else if (strBrowserTimeout.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Please enter the default browser time out", "Browser Timeout", JOptionPane.INFORMATION_MESSAGE);
 
+		} else if (strEmail.length() == 0) {
+			JOptionPane.showMessageDialog(null, "Please enter the preferred Email Id", "Email", JOptionPane.INFORMATION_MESSAGE);
+			
     	} else {
     		this.setState(Frame.ICONIFIED);
 	    	CallDriverScripts.runDriverScripts(strTestRunName);
@@ -396,6 +437,9 @@ public class UICode extends javax.swing.JFrame {
 				case "BrowserTimeOut":
 					strValue = strBrowserTimeout;
 					return strValue;
+				case "Email":
+					strValue = strEmail;
+					return strValue;
 			}
 			
 			return null;
@@ -417,6 +461,7 @@ public class UICode extends javax.swing.JFrame {
     		strTestRunBy = "User";
     		strTestRunLocation = args[0];
     		strBrowserTimeout = "10";
+    		strEmail = "abc@abc.com";
     		    	
     		File f = new File(strTestRunLocation);
     		String vFileName = (f.getName()).toString();
@@ -472,7 +517,7 @@ public class UICode extends javax.swing.JFrame {
     private javax.swing.JLabel labelTestRunName;
     private javax.swing.JLabel labelSelectTestRun;
     private javax.swing.JLabel labelBrowserTimeout;
-    
+    private javax.swing.JLabel labelEmail;
     private javax.swing.JLabel labelCopyright;
     
     private javax.swing.JLabel logoAnyAUT;
@@ -483,6 +528,7 @@ public class UICode extends javax.swing.JFrame {
     private javax.swing.JTextField vUserName;
     private javax.swing.JTextField vRunExcelPath;
     private javax.swing.JTextField vBrowserTimeout;
+    private javax.swing.JTextField vEmail;
     
     private final JFileChooser chooseExcelFile;
     private String vChosenExcelPath;
